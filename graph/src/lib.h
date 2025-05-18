@@ -21,6 +21,8 @@ struct graph {
     Vertex *vertexs;
 };
 
+#define SWAP( x , y , temp ) temp = x; x = y; y = temp;
+
 void PushVertex( Graph * graph , int val);
 Vertex CreateVertex( int val);
 void AllocateMemGraph( Graph * graph );
@@ -29,5 +31,7 @@ void Clear( Graph ** graph );
 void PrintGraph( Graph * graph );
 void *MyMalloc( void * ptr , int size );
 void PushEdge( Graph * graph , int vertexVal1 , int vertexVal2 );
-Vertex * Search( Graph * graph , int val );
+Vertex * SearchVertexBinary( Graph * graph , int val );
 void Debug( char * msg );
+void SortAfterPushVertex( Graph * graph );
+void SortAfterPushEdge( Vertex * vertex );

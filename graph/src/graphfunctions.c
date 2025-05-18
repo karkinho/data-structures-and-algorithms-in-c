@@ -33,6 +33,7 @@ void PushVertex( Graph * graph , int val ) {
     graph->sizeGraph += 1;
     graph->vertexs = ( Vertex * )MyMalloc( graph->vertexs , graph->sizeGraph * sizeof( Vertex ) ); 
     graph->vertexs[graph->sizeGraph - 1] = new;
+    SortAfterPushVertex( graph );
 }
 
 void PrintGraph( Graph * graph ) {
@@ -45,22 +46,44 @@ void PrintGraph( Graph * graph ) {
     }   
 }
 
-Vertex * Search( Graph * graph , int val ) {
-    for ( int i = 0 ; i < graph->sizeGraph ; i++ ) {
-        if( graph->vertexs[i].val == val ) {
-            return &graph->vertexs[i];
+Vertex * SearchVertexBinary( Graph * graph , int val ) {
+    int left = 0 , right = graph->sizeGraph - 1 , half = ( left + right ) / 2;
+    while ( left <= half && half <= right ) {
+        if( graph->vertexs[half].val == val ) return &graph->vertexs[half];
+        if( graph->vertexs[half].val > val ) {
+            right = half - 1;
+        } else {
+            left = half + 1;
         }
+        half = ( left + right ) / 2;
     }
+    
     Debug( "Vertex not found" );
     return NULL;
 }
 
+void SortAfterPushVertex( Graph * graph ) {
+    Vertex temp;
+    int index = graph->sizeGraph - 1;
+    while ( index > 0 ) {
+        if( graph->vertexs[index - 1].val > graph->vertexs[index].val ) {
+            SWAP( graph->vertexs[index - 1] , graph->vertexs[index] , temp );
+            index--;
+        } else {
+            return;
+        }
+    }
+    return;
+}
+
 void PushEdge( Graph * graph , int vertexStartVal , int vertexEndVal ) {
-    Vertex * vertexStart = Search( graph , vertexStartVal );
-    Vertex * vertexEnd = Search( graph , vertexEndVal );
+    Vertex * vertexStart = SearchVertexBinary( graph , vertexStartVal );
+    Vertex * vertexEnd = SearchVertexBinary( graph , vertexEndVal );
+    if( vertexEnd == NULL || vertexStart == NULL ) return;
     vertexStart->sizeAdjacency += 1;
     vertexStart->adjacency = ( Vertex ** )MyMalloc( vertexStart->adjacency , sizeof( Vertex * ) * vertexStart->sizeAdjacency );
     vertexStart->adjacency[vertexStart->sizeAdjacency - 1] = vertexEnd;
+    SortAfterPushEdge( vertexStart );
 }
 
 void Clear( Graph ** graph ) {
@@ -70,4 +93,18 @@ void Clear( Graph ** graph ) {
     free( ( *graph )->vertexs );
     free( *graph );
     *graph = NULL;
+}
+
+void SortAfterPushEdge( Vertex * vertex ) {
+    Vertex * temp;
+    int index = vertex->sizeAdjacency - 1;
+    while ( index > 0 ) {
+        if( vertex->adjacency[index - 1]->val > vertex->adjacency[index]->val ) {
+            SWAP( vertex->adjacency[index - 1] , vertex->adjacency[index] , temp );
+            index--;
+        } else {
+            return;
+        }
+    }
+    return;
 }
