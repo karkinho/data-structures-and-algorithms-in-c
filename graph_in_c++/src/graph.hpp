@@ -3,6 +3,7 @@
 #include <iostream>
 #include <queue>
 #include <stack>
+#include <algorithm>
 
 class Graph;
 class Vertex;
@@ -19,6 +20,7 @@ class Graph {
         int SearchVertex( int val );
         void Print();
         void Dijsktra( int vertexStartVal , int vertexEndVal );
+        void Kruskal();
 };
 
 class Vertex {
@@ -27,7 +29,7 @@ class Vertex {
         int index;
         int adjSize;
         std::vector< int > weight;
-        std::vector< std::shared_ptr< Vertex >> adj;
+        std::vector< Vertex * > adj;
     public:
         Vertex();
         Vertex( int val , int index );
@@ -36,8 +38,19 @@ class Vertex {
         int getVal();
         int getIndex();
         int getAdjSize();
-        void AddAdj( std::shared_ptr< Vertex > vertex , int weightVertex );
+        void AddAdj( Vertex * vertex , int weightVertex );
         int* getAdj( int index );
 };
 
+class DSU {
+    public:
+        DSU( int size );
+        ~DSU();
+        int find( int index );
+        void unite( int x , int y  );
 
+    private:
+        std::vector< int > rank , parent;
+};
+
+bool comparator( std::vector< int > &a,std::vector<int> &b );
