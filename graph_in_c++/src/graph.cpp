@@ -111,8 +111,6 @@ void Graph::Kruskal() {
 
     DSU dsu = DSU( size );
 
-
-    std::cout << orderedEdges[3][0] << " - " << orderedEdges[3][1] << '\n';
     for ( int i = 0 ; i < edgesSize ; i++ ) {
         if( dsu.find( orderedEdges[i][0] ) != dsu.find( orderedEdges[i][1] ) ) {
             dsu.unite( orderedEdges[i][0] , orderedEdges[i][1] );
@@ -126,7 +124,6 @@ void Graph::Kruskal() {
         }
     }
 }
-
 
 Vertex::Vertex() {
     val = -1;
